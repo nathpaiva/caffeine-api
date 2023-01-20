@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "lerna run start",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "reset:yarn": "rm -rf yarn.lock packages/**/yarn.lock"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
