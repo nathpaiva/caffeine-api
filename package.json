@@ -10,12 +10,9 @@
     "reset:node": "rm -rf node_modules packages/**/node_modules"
   },
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "typescript": "^5.1.6"
+    "lerna": "^4.0.0"
   },
-  "dependencies": {
-    "@types/node": "^20.3.3",
-    "mongoose": "^7.3.1",
-    "winston": "^3.9.0"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }
