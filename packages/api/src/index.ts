@@ -1,9 +1,9 @@
-import app from './config/express'
-import db from './models/db'
+import app from './config/express';
+import db from './models/db';
 
-db.connection()
+db();
 
-const port = process.env.PORT || 3000; // used to create, sign, and verify tokens
+const port: number | string = process.env.PORT || 3000; // used to create, sign, and verify tokens
 
 app().listen(port, () => {
   console.log('====================================');

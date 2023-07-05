@@ -2,11 +2,20 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "dev": "lerna run start",
+    "dev": "lerna run --stream start",
+    "dev:api": "lerna run --stream --scope api start",
+    "dev:view": "lerna run --scope caffeine start",
     "bootstrap": "lerna bootstrap",
-    "reset:yarn": "rm -rf yarn.lock packages/**/yarn.lock"
+    "reset:yarn": "rm -rf yarn.lock packages/**/yarn.lock",
+    "reset:node": "rm -rf node_modules packages/**/node_modules"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/node": "^20.3.3",
+    "mongoose": "^7.3.1",
+    "winston": "^3.9.0"
   }
 }

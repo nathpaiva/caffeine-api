@@ -10,11 +10,10 @@ import { Home, NotFound } from './pages'
 function App() {
   return (
     <div>
-      <Button variant="solid">Hello</Button>
+      {/* <Button>Hello</Button> */}
       <h1>My title</h1>
 
       <Link to="/">Home</Link>
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
