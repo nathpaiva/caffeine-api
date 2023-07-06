@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+
+    "target": "es2016",
+    "lib": ["es6"],
+
+    "module": "commonjs",
+
+    "types": ["node"],
+    "allowUmdGlobalAccess": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true
+  },
+
+  "exclude": ["src/**/*.js"]
+}
