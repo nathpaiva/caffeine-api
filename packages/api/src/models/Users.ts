@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import { ErrorRequestHandler } from 'express';
 
 const usersSchema = new mongoose.Schema({
   user_name: {
@@ -20,3 +22,10 @@ const usersSchema = new mongoose.Schema({
 });
 
 export default mongoose.model('Users', usersSchema);
+
+export const comparePassword = (candidatePassword: string, hash: string, callback: any) => {
+  bcrypt.compare(candidatePassword, hash, (err: any, isMatch: boolean) => {
+    if (err) throw err;
+    callback(null, isMatch);
+  });
+};
