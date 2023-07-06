@@ -1,6 +1,11 @@
-import { ErrorRequestHandler, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import Users, { comparePassword } from '../models/Users';
 import { Controllers } from './types';
+import jwt from 'jsonwebtoken';
+
+const _generateToken = (user: any, secret: any) => {
+  return jwt.sign(user.toJSON(), secret, { expiresIn: '1h' });
+};
 
 export const users: Controllers['users'] = {
   root: (_: Request, res: Response) => res.json({ message: 'Welcome to the coolest API on earth!' }),
@@ -11,11 +16,7 @@ export const users: Controllers['users'] = {
   },
   login: async (req: Request, res: Response) => {
     try {
-      console.log('req.body', req);
-
       const users = await Users.findOne({ user_name: req.body.user_name });
-
-      console.log('users', users);
 
       if (!users) {
         return res.status(404).json({
@@ -24,14 +25,28 @@ export const users: Controllers['users'] = {
         });
       }
 
-      comparePassword(users.user_name, users.password, (_: Request, isMatch: boolean) => {
-        console.log('isMatch', isMatch);
-      });
+      comparePassword(req.body.password, users.password, (_: Request, isMatch: boolean) => {
+        if (!isMatch) {
+          return res.status(401).json({
+            success: false,
+            message: 'Authentication failed. Wrong password.',
+          });
+        }
 
-      return res.json({ users });
+        const token = _generateToken(users, req.app.get('superSecret'));
+
+        return res.json({
+          success: true,
+          message: 'Enjoy your token!',
+          token,
+          users,
+        });
+      });
     } catch (error) {
-      // TODO: create the error handler
-      throw error;
+      return res.status(500).json({
+        success: false,
+        message: `Authentication failed. Internal server error. ${error}`,
+      });
     }
   },
 };
