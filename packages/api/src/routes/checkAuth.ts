@@ -14,6 +14,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
+  // TODO: check jwt.verify type
   jwt.verify(token, app.get('superSecret'), (err: any, decoded: any) => {
     if (err) {
       return res.json({

@@ -23,7 +23,9 @@ const usersSchema = new mongoose.Schema({
 
 export default mongoose.model('Users', usersSchema);
 
+// TODO: refactor this function and check the type
 export const comparePassword = (candidatePassword: string, hash: string, callback: any) => {
+  // TODO: check bcrypt.compare type
   bcrypt.compare(candidatePassword, hash, (err: any, isMatch: boolean) => {
     if (err) throw err;
     callback(null, isMatch);
