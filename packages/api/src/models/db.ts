@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 
-const URL_DB = 'mongodb://localhost/caffeine';
+const URL_DB = process.env.API_DB_NAME;
 
 export default async () => {
+  if (!URL_DB) {
+    throw new Error('API_DB_NAME is not defined');
+  }
+
   const db = mongoose.connection;
 
   db.on('error', function (err) {

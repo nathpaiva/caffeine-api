@@ -40,7 +40,12 @@ export const users: Controllers['users'] = {
             });
           }
 
-          const token = _generateToken(users, req.app.get('superSecret'));
+          // TODO: refactor this function
+          const API_SECRET = process.env.API_DB_KEY;
+          if (!API_SECRET) {
+            throw new Error('API_SECRET is not defined');
+          }
+          const token = _generateToken(users, req.app.get(API_SECRET));
 
           // TODO: refactor this return
           return res.json({

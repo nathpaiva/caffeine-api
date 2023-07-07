@@ -4,6 +4,7 @@
 
     "target": "es2016",
     "lib": ["es6"],
+    "moduleResolution": "node",
 
     "module": "commonjs",
 

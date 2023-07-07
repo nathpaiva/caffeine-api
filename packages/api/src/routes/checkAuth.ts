@@ -2,6 +2,11 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 export default (req: Request, res: Response, next: NextFunction) => {
+  const API_SECRET = process.env.API_DB_KEY;
+  if (!API_SECRET) {
+    throw new Error('API_SECRET is not defined');
+  }
+
   const { body, query, header, app } = req;
 
   // TODO: check header type
@@ -15,7 +20,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   // TODO: check jwt.verify type
-  jwt.verify(token, app.get('superSecret'), (err: any, decoded: any) => {
+  jwt.verify(token, app.get(API_SECRET), (err: any, decoded: any) => {
     if (err) {
       return res.json({
         success: false,
