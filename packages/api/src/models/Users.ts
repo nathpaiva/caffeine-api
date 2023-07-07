@@ -1,13 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { ErrorRequestHandler } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Document, HydratedDocument } from 'mongoose';
 
-const usersSchema = new mongoose.Schema({
-  user_name: {
+const userInterfaceSchema = new mongoose.Schema<User>({
+  name: {
     type: String,
     default: '',
   },
-  user_mail: {
+  email: {
     type: String,
     default: '',
   },
@@ -21,17 +20,33 @@ const usersSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('Users', usersSchema);
+export default mongoose.model('Users', userInterfaceSchema);
 
-// TODO: refactor this function and check the type
-export const comparePassword = (
+export const comparePassword = async (
   candidatePassword: string,
   hash: string,
-  callback: any,
-) => {
-  // TODO: check bcrypt.compare type
-  bcrypt.compare(candidatePassword, hash, (err: any, isMatch: boolean) => {
-    if (err) throw err;
-    callback(null, isMatch);
-  });
+): Promise<boolean> => {
+  try {
+    const isPassMatch = await bcrypt.compare(candidatePassword, hash);
+
+    return isPassMatch;
+  } catch (err) {
+    throw new Error('error comparing password');
+  }
+};
+
+export const createUser = async (
+  newUser: HydratedDocument<User>,
+): Promise<User> => {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newUser.password, salt);
+
+    const result = await newUser.save();
+    newUser.password = hash;
+
+    return result;
+  } catch (err) {
+    throw new Error('Error creating user');
+  }
 };
