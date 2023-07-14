@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+
 import Users, { comparePassword } from '../models/Users';
 import { Controllers } from './types';
-import jwt from 'jsonwebtoken';
 
 // TODO: refactor this function and check the type
 const _generateToken = (user: any, secret: any) => {
@@ -9,7 +10,8 @@ const _generateToken = (user: any, secret: any) => {
 };
 
 export const users: Controllers['users'] = {
-  root: (_: Request, res: Response) => res.json({ message: 'Welcome to the coolest API on earth!' }),
+  root: (_: Request, res: Response) =>
+    res.json({ message: 'Welcome to the coolest API on earth!' }),
   list_users: async (_: Request, res: Response) => {
     const users = await Users.find();
 
@@ -27,24 +29,28 @@ export const users: Controllers['users'] = {
       }
 
       // TODO: refactor this function
-      comparePassword(req.body.password, users.password, (_: Request, isMatch: boolean) => {
-        if (!isMatch) {
-          return res.status(401).json({
-            success: false,
-            message: 'Authentication failed. Wrong password.',
+      comparePassword(
+        req.body.password,
+        users.password,
+        (_: Request, isMatch: boolean) => {
+          if (!isMatch) {
+            return res.status(401).json({
+              success: false,
+              message: 'Authentication failed. Wrong password.',
+            });
+          }
+
+          const token = _generateToken(users, req.app.get('superSecret'));
+
+          // TODO: refactor this return
+          return res.json({
+            success: true,
+            message: 'Enjoy your token!',
+            token,
+            users,
           });
-        }
-
-        const token = _generateToken(users, req.app.get('superSecret'));
-
-        // TODO: refactor this return
-        return res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token,
-          users,
-        });
-      });
+        },
+      );
     } catch (error) {
       return res.status(500).json({
         success: false,

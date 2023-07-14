@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { ErrorRequestHandler } from 'express';
+import mongoose from 'mongoose';
 
 const usersSchema = new mongoose.Schema({
   user_name: {
@@ -24,7 +24,11 @@ const usersSchema = new mongoose.Schema({
 export default mongoose.model('Users', usersSchema);
 
 // TODO: refactor this function and check the type
-export const comparePassword = (candidatePassword: string, hash: string, callback: any) => {
+export const comparePassword = (
+  candidatePassword: string,
+  hash: string,
+  callback: any,
+) => {
   // TODO: check bcrypt.compare type
   bcrypt.compare(candidatePassword, hash, (err: any, isMatch: boolean) => {
     if (err) throw err;
