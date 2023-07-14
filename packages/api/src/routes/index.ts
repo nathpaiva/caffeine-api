@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+
 import { Controllers } from '../controllers/types';
 import checkAuth from './checkAuth';
 
