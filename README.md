@@ -54,4 +54,6 @@ It's a study project of registering coffee capsules. Such as:
 
 - This command to access [http://localhost:3000](http://localhost:3000)
 
-##
+## Say hello 👋
+
+Since I'm aiming to learn more about `back-end`, any tips or suggestions are welcome. I would love to hear from you, feel free to open [an issue](https://github.com/nathpaiva/caffeine-api/issues) or also a [pull request](https://github.com/nathpaiva/caffeine-api/fork).
