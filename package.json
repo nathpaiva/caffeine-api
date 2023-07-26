@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "lerna run --stream start",
+    "test": "lerna run --stream test",
+    "test:api": "lerna run --stream --scope api test",
     "dev:api": "lerna run --stream --scope api start",
     "dev:view": "lerna run --scope caffeine start",
     "bootstrap": "lerna bootstrap",

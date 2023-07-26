@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
-
-export type UsersController = {
+type UsersController = {
   root: (req: Request, res: Response) => void;
   list_users: (req: Request, res: Response) => void;
   login: (req: Request, res: Response) => void;
+  create_user: (req: Request, res: Response) => void;
 };
 
-export type Controllers = {
+type Controllers = {
   users: UsersController;
 };

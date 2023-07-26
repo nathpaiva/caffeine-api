@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import app from './config/express';
 import db from './models/db';
 

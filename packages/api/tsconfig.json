@@ -4,10 +4,11 @@
 
     "target": "es2016",
     "lib": ["es6"],
+    "moduleResolution": "node",
 
     "module": "commonjs",
 
-    "types": ["node"],
+    "types": ["node", "@types/jest", "./src/@types/controllers.d.ts", "./src/@types/user.d.ts"],
     "allowUmdGlobalAccess": true,
     "resolveJsonModule": true,
     "allowJs": true,
@@ -19,6 +20,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-
+  "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.js"]
 }

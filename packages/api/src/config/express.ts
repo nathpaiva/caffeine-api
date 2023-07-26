@@ -9,9 +9,14 @@ import routes from '../routes';
 import logger from '../services/logger';
 
 export default () => {
+  const API_SECRET = process.env.API_DB_KEY;
+  if (!API_SECRET) {
+    throw new Error('API_SECRET is not defined');
+  }
+
   const app: Application = express();
 
-  app.set('superSecret', config().secret);
+  app.set(API_SECRET, config().secret);
 
   app.use(
     bodyParser.urlencoded({
