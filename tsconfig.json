@@ -8,7 +8,12 @@
 
     "module": "commonjs",
 
-    "types": ["node", "@types/jest", "./src/@types/controllers.d.ts", "./src/@types/user.d.ts"],
+    "types": [
+      "node",
+      "@types/jest",
+      "./src/@types/controllers.d.ts",
+      "./src/@types/user.d.ts"
+    ],
     "allowUmdGlobalAccess": true,
     "resolveJsonModule": true,
     "allowJs": true,
