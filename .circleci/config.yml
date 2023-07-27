@@ -1,75 +1,20 @@
+setup: true
 version: 2.1
-
-aliases:
-  - &restore-node-modules-cache
-    name: Restore node_modules cache
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
-
-  - &save-yarn-cache
-    name: Save yarn cache
-    paths:
-      - ~/.cache/yarn
-    key: v1-yarn-cache
-
-  - &save-node-modules-cache
-    name: Save node_modules cache
-    paths:
-      - node_modules
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
-
-defaults: &defaults
-  docker:
-    - image: cimg/node:18.17.0
-  working_directory: ~/caffeine-api
-
-jobs:
-  build_packages:
-    <<: *defaults
-
-    steps:
-      - checkout
-      - restore_cache: *restore-node-modules-cache
-
-      - run:
-          name: Install Dependencies
-          command: yarn install --frozen-lockfile
-
-      - save_cache: *save-node-modules-cache
-      - save_cache: *save-yarn-cache
-      - persist_to_workspace:
-          root: '.'
-          paths:
-            - '*'
-
-  lint_test:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/caffeine-api
-
-      - run:
-          name: Run Lint
-          command: yarn lint
-
-  unit_test:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/caffeine-api
-
-      - run:
-          name: Run Unit Tests
-          command: yarn test:ci
-
+orbs:
+  continuation: circleci/continuation@1.0.0
 workflows:
-  branch-workflow:
+  setup:
     jobs:
-      - build_packages
-      - lint_test:
-          requires:
-            - build_packages
-      - unit_test:
-          requires:
-            - build_packages
+      - continuation/continue:
+          configuration_path: '.circleci/main.yml'
+          parameters: /home/circleci/params.json
+          pre-steps:
+            - run:
+                command: |
+                  if [ -z "${CIRCLE_PULL_REQUEST##*/}" ]
+                  then
+                    IS_PR=false
+                  else
+                    IS_PR=true
+                  fi
+                  echo '{ "is_pr": '$IS_PR' }' >> /home/circleci/params.json
