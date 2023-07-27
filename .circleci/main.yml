@@ -69,7 +69,7 @@ jobs:
           command: yarn test:ci
 
 workflows:
-  whence-pr:
+  pr-workflow:
     when: << pipeline.parameters.is_pr >>
     jobs:
       - install_dependencies
@@ -79,14 +79,3 @@ workflows:
       - unit_test:
           requires:
             - install_dependencies
-
-  # branch-workflow:
-  #   jobs:
-
-  #     - install_dependencies
-  #     - lint_test:
-  #         requires:
-  #           - install_dependencies
-  #     - unit_test:
-  #         requires:
-  #           - install_dependencies
