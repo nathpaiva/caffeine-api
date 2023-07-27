@@ -5,6 +5,9 @@
   "main": "src/index.ts",
   "author": "Nath Paiva",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "yarn start",
     "start": "nodemon src/index.ts -L --files",
