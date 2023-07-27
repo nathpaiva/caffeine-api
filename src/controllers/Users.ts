@@ -5,7 +5,6 @@ import {
   validationResult,
 } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import { Model, HydratedDocument } from 'mongoose';
 
 import Users, { comparePassword, createUser } from '../models/Users';
 
