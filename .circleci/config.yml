@@ -19,7 +19,7 @@ aliases:
 
 defaults: &defaults
   docker:
-    - image: circleci/node:latest
+    - image: circleci/node@18.17.0-alpine3.17
   working_directory: ~/caffeine-api
 
 jobs:
