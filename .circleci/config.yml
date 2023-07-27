@@ -19,7 +19,7 @@ aliases:
 
 defaults: &defaults
   docker:
-    - image: sfiorotti/dockerhub-awscli-node-yarn:latest
+    - image: circleci/node:12.22.7-bullseye-browsers-legacy
   working_directory: ~/caffeine-api
 
 jobs:
