@@ -2,8 +2,8 @@ version: 2.1
 
 parameters:
   is_pr:
-    type: string
-    default: /home/circleci/params.json
+    type: boolean
+    default: false
 
 aliases:
   - &restore-node-modules-cache
