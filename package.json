@@ -6,7 +6,7 @@
   "author": "Nath Paiva",
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": "<=18"
   },
   "scripts": {
     "dev": "yarn start",
