@@ -23,7 +23,7 @@ defaults: &defaults
   working_directory: ~/caffeine-api
 
 jobs:
-  build_packages:
+  install_dependencies:
     <<: *defaults
 
     steps:
@@ -66,10 +66,10 @@ jobs:
 workflows:
   branch-workflow:
     jobs:
-      - build_packages
+      - install_dependencies
       - lint_test:
           requires:
-            - build_packages
+            - install_dependencies
       - unit_test:
           requires:
-            - build_packages
+            - install_dependencies
