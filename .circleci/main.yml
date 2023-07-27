@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  is_pr:
+    type: string
+    default: /home/circleci/params.json
+
 aliases:
   - &restore-node-modules-cache
     name: Restore node_modules cache
@@ -64,7 +69,8 @@ jobs:
           command: yarn test:ci
 
 workflows:
-  branch-workflow:
+  whence-pr:
+    when: << pipeline.parameters.is_pr >>
     jobs:
       - install_dependencies
       - lint_test:
@@ -73,3 +79,14 @@ workflows:
       - unit_test:
           requires:
             - install_dependencies
+
+  # branch-workflow:
+  #   jobs:
+
+  #     - install_dependencies
+  #     - lint_test:
+  #         requires:
+  #           - install_dependencies
+  #     - unit_test:
+  #         requires:
+  #           - install_dependencies
