@@ -34,10 +34,6 @@ jobs:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
 
-      - run:
-          name: Build Packages
-          command: yarn build
-
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
       - persist_to_workspace:
