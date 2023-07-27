@@ -6,7 +6,7 @@
   "author": "Nath Paiva",
   "license": "MIT",
   "engines": {
-    "node": "17.2.0"
+    "node": "16.10.0"
   },
   "scripts": {
     "dev": "yarn start",
