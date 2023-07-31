@@ -31,6 +31,6 @@ export default (app: Application, controllers: Controllers) => {
   // AUTHENTICATED ROUTES
   api_auth_routes.get('/users', checkAuth, controllers.users.list_users);
 
-  app.use('/auth', api_auth_routes);
+  app.use('/api/auth', api_auth_routes);
   app.use('/api', api_routes);
 };

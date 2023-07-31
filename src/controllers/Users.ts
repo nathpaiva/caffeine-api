@@ -71,13 +71,12 @@ export const users: Controllers['users'] = {
         });
       }
 
-      // TODO: env use
-      const API_SECRET = process.env.API_DB_KEY;
-      if (!API_SECRET) {
-        throw new Error('API_SECRET is not defined');
+      const JWT_NAME = process.env.JWT_NAME;
+      if (!JWT_NAME) {
+        throw new Error('JWT_NAME is not defined');
       }
 
-      const token = _generateToken(user.toJSON(), req.app.get(API_SECRET));
+      const token = _generateToken(user.toJSON(), req.app.get(JWT_NAME));
 
       // TODO: refactor this return
       return res.json({

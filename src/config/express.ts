@@ -1,22 +1,21 @@
 import bodyParser from 'body-parser';
-import express, { Application, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import express, { Application } from 'express';
 import morgan from 'morgan';
 
 import * as CONTROLLER from '../controllers';
-import config from '../models/config';
 import routes from '../routes';
 import logger from '../services/logger';
 
 export default () => {
-  const API_SECRET = process.env.API_DB_KEY;
-  if (!API_SECRET) {
-    throw new Error('API_SECRET is not defined');
+  const JWT_NAME = process.env.JWT_NAME;
+  const JWT_KEY = process.env.JWT_KEY;
+  if (!JWT_NAME || !JWT_KEY) {
+    throw new Error('JWT_NAME OR JWT_KEY is not defined');
   }
 
   const app: Application = express();
 
-  app.set(API_SECRET, config().secret);
+  app.set(JWT_NAME, JWT_KEY);
 
   app.use(
     bodyParser.urlencoded({
