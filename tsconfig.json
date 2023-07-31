@@ -12,7 +12,8 @@
       "node",
       "@types/jest",
       "./src/@types/controllers.d.ts",
-      "./src/@types/user.d.ts"
+      "./src/@types/user.d.ts",
+      "./src/@types/capsule.d.ts"
     ],
     "allowUmdGlobalAccess": true,
     "resolveJsonModule": true,
