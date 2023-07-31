@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import mongoose, { Document, HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 
 const userInterfaceSchema = new mongoose.Schema<User>({
   name: {
