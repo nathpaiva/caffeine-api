@@ -19,7 +19,6 @@ export default (app: Application, controllers: Controllers) => {
         'password',
         'Password must be at least 2 characters long and contain one number, one lowercase letter, and one uppercase letter',
       )
-        // TODO: change min to 8
         .isLength({ min: 2 })
         // TODO: add contains to restring the password
         .notEmpty(),
