@@ -10,16 +10,16 @@ export default async () => {
   const db = mongoose.connection;
 
   db.on('error', function (err) {
-    console.log('Error to connect.', err);
+    console.log(`Error to connect. ${err}`);
   });
   db.on('open', function () {
     console.log('Connection opened.');
   });
-  db.on('connected', function (err) {
+  db.on('connected', function () {
     mongoose.Promise = global.Promise;
-    console.log('Connected to: ' + URL_DB);
+    console.log(`Connected to: ${URL_DB}`);
   });
-  db.on('disconnected', function (err) {
+  db.on('disconnected', function () {
     console.log('Disconnected.');
   });
 
