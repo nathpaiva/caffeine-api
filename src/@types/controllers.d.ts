@@ -5,6 +5,13 @@ type UsersController = {
   create_user: (req: Request, res: Response) => void;
 };
 
+type CapsulesController = {
+  list_capsules: (req: Request, res: Response) => void;
+  delete: (req: Request, res: Response) => void;
+  create: (req: Request, res: Response) => void;
+};
+
 type Controllers = {
   users: UsersController;
+  capsules: CapsulesController;
 };
