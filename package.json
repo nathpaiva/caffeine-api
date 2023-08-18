@@ -13,8 +13,8 @@
     "start": "nodemon src/index.ts -L --files",
     "test:ci": "jest",
     "test": "jest --watch",
-    "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "lint": "eslint src --ext .ts",
+    "format": "eslint src --ext .ts --fix"
   },
   "devDependencies": {
     "@nathpaiva/eslint-config": "^1.0.0",
