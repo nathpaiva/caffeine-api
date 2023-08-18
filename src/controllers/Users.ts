@@ -1,4 +1,3 @@
-import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
@@ -9,12 +8,12 @@ const _generateToken = (user: User, secret: string) => {
 }
 
 export const users: Controllers['users'] = {
-  list_users: async (_: Request, res: Response) => {
+  list_users: async (req, res) => {
     const users = await Users.find()
 
     res.json(users)
   },
-  create_user: async (req, res: Response) => {
+  create_user: async (req, res) => {
     const user: User = req.body
     const response = validationResult(req)
     if (response && !response.isEmpty()) {
@@ -42,7 +41,7 @@ export const users: Controllers['users'] = {
         .json({ message: (err as Error).message, success: false })
     }
   },
-  login: async (req: Request, res: Response) => {
+  login: async (req, res) => {
     try {
       const user = await Users.findOne({
         user_name: req.body.user_name,
