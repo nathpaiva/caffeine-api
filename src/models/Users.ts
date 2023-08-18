@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
-import mongoose, { HydratedDocument } from 'mongoose';
+import bcrypt from 'bcryptjs'
+import mongoose, { HydratedDocument } from 'mongoose'
 
 const userInterfaceSchema = new mongoose.Schema<User>({
   name: {
@@ -18,35 +18,35 @@ const userInterfaceSchema = new mongoose.Schema<User>({
     type: Date,
     default: Date.now(),
   },
-});
+})
 
-export default mongoose.model('Users', userInterfaceSchema);
+export default mongoose.model('Users', userInterfaceSchema)
 
 export const comparePassword = async (
   candidatePassword: string,
   hash: string,
 ): Promise<boolean> => {
   try {
-    const isPassMatch = await bcrypt.compare(candidatePassword, hash);
+    const isPassMatch = await bcrypt.compare(candidatePassword, hash)
 
-    return isPassMatch;
+    return isPassMatch
   } catch (err) {
-    throw new Error('error comparing password');
+    throw new Error('error comparing password')
   }
-};
+}
 
 export const createUser = async (
   newUser: HydratedDocument<User>,
 ): Promise<User> => {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(newUser.password, salt);
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(newUser.password, salt)
 
-    const result = await newUser.save();
-    newUser.password = hash;
+    const result = await newUser.save()
+    newUser.password = hash
 
-    return result;
+    return result
   } catch (err) {
-    throw new Error('Error creating user');
+    throw new Error('Error creating user')
   }
-};
+}

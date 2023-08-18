@@ -1,28 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-const URL_DB = process.env.API_DB_NAME;
+const URL_DB = process.env.API_DB_URL
 
 export default async () => {
   if (!URL_DB) {
-    throw new Error('API_DB_NAME is not defined');
+    throw new Error('API_DB_URL is not defined')
   }
 
-  const db = mongoose.connection;
+  const db = mongoose.connection
 
   db.on('error', function (err) {
-    console.log(`Error to connect. ${err}`);
-  });
+    console.log(`Error to connect. ${err}`)
+  })
   db.on('open', function () {
-    console.log('Connection opened.');
-  });
+    console.log('Connection opened.')
+  })
   db.on('connected', function () {
-    mongoose.Promise = global.Promise;
-    console.log(`Connected to: ${URL_DB}`);
-  });
+    console.log(`Connected to: ${URL_DB}`)
+  })
   db.on('disconnected', function () {
-    console.log('Disconnected.');
-  });
+    console.log('Disconnected.')
+  })
 
-  mongoose.Promise = global.Promise;
-  return await mongoose.connect(URL_DB);
-};
+  return await mongoose.connect(URL_DB)
+}

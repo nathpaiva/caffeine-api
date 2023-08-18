@@ -1,11 +1,11 @@
-import fs from 'fs';
-import winston from 'winston';
+import fs from 'fs'
+import winston from 'winston'
 
 if (!fs.existsSync('logs')) {
-  fs.mkdirSync('logs');
+  fs.mkdirSync('logs')
 }
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   transports: [
     new winston.transports.File({
       level: 'info',
@@ -14,6 +14,4 @@ const logger = winston.createLogger({
       maxFiles: 10,
     }),
   ],
-});
-
-export default logger;
+})
