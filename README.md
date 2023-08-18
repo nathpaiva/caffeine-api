@@ -46,11 +46,11 @@ It's a study project of registering coffee capsules. Such as:
 
 ## Before starting the project you must install the dependencies:
 
-- `yarn` ou `npm install`
+- `yarn`
 
 ## To start the project you have to run the commands:
 
-`yarn start` or `npm start`
+`yarn start`
 
 - This command to access [http://localhost:3000](http://localhost:3000)
 

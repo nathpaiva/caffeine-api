@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const capsulesInterfaceSchema = new mongoose.Schema<Capsule>({
   user_id: {
@@ -34,6 +34,6 @@ const capsulesInterfaceSchema = new mongoose.Schema<Capsule>({
     type: Date,
     default: Date.now(),
   },
-});
+})
 
-export default mongoose.model('Capsules', capsulesInterfaceSchema);
+export default mongoose.model('Capsules', capsulesInterfaceSchema)

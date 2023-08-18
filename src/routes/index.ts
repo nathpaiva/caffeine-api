@@ -1,15 +1,23 @@
-import express, { Application } from 'express';
-import { check } from 'express-validator';
+import express, { Application } from 'express'
+import { check } from 'express-validator'
 
-import checkAuth from './checkAuth';
+import checkAuth from './check-auth'
 
 export default (app: Application, controllers: Controllers) => {
-  const api_routes = express.Router();
-  const api_auth_routes = express.Router();
+  /**
+   * routes config
+   */
+  const api_routes = express.Router()
+  const api_auth_routes = express.Router()
 
   // NOT AUTHENTICATED ROUTES
-  api_routes.get('/', controllers.users.root);
-  api_routes.get('/users', controllers.users.list_users);
+  /**
+   * Get all users, this endpoint was created only for the test propose
+   */
+  api_routes.get('/users', controllers.users.list_users)
+  /**
+   * Create a new user
+   */
   api_routes.post(
     '/create/user',
     [
@@ -24,21 +32,38 @@ export default (app: Application, controllers: Controllers) => {
         .notEmpty(),
     ],
     controllers.users.create_user,
-  );
-  api_routes.post('/login', controllers.users.login);
+  )
+  /**
+   * User login to get the token
+   */
+  api_routes.post('/login', controllers.users.login)
 
   // AUTHENTICATED ROUTES
-  api_auth_routes.get('/users', checkAuth, controllers.users.list_users);
+  /**
+   * Get all users, this endpoint was created only for the test propose
+   */
+  api_auth_routes.get('/users', checkAuth, controllers.users.list_users)
+  /**
+   * Get all capsules this endpoint was created only for the test propose
+   * TODO: create a request to get all capsules for the authenticated user
+   */
   api_auth_routes.get(
     '/capsules',
     checkAuth,
     controllers.capsules.list_capsules,
-  );
+  )
+  /**
+   * Delete a capsule
+   * TODO: change this action to use the user id
+   */
   api_auth_routes.delete(
     '/capsules/:id',
     checkAuth,
     controllers.capsules.delete,
-  );
+  )
+  /**
+   * Create the capsule to the current authenticated user
+   */
   api_auth_routes.post(
     '/capsules/user/:id',
     checkAuth,
@@ -52,8 +77,8 @@ export default (app: Application, controllers: Controllers) => {
       check('notify_end_active', 'Notify is required').isBoolean(),
     ],
     controllers.capsules.create,
-  );
+  )
 
-  app.use('/api/auth', api_auth_routes);
-  app.use('/api', api_routes);
-};
+  app.use('/api/auth', api_auth_routes)
+  app.use('/api', api_routes)
+}
