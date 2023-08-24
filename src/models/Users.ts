@@ -42,8 +42,8 @@ export const createUser = async (
     const salt = await bcrypt.genSalt(10)
     const hash = await bcrypt.hash(newUser.password, salt)
 
-    const result = await newUser.save()
     newUser.password = hash
+    const result = await newUser.save()
 
     return result
   } catch (err) {

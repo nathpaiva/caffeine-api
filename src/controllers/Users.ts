@@ -44,7 +44,7 @@ export const users: Controllers['users'] = {
   login: async (req, res) => {
     try {
       const user = await Users.findOne({
-        user_name: req.body.user_name,
+        name: req.body.name,
       })
 
       if (!user) {
