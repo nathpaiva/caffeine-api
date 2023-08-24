@@ -28,7 +28,7 @@ It's a study project of registering coffee capsules. Such as:
 - [Node](https://nodejs.org/en/download/)
 - [Typescript](https://www.typescriptlang.org/)
 - [Express](https://expressjs.com/)
-- [Mongodb](https://www.mongodb.com/cloud/atlas/lp/try4?adgroup=146373896140&cq_cmp=19616985274&gad=1)
+- [Mongodb](https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/connect/#connect-to-a-mongodb-server-on-your-local-machine)
 
 ## Test developed with:
 
