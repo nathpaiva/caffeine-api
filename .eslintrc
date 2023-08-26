@@ -1,3 +1,6 @@
 {
-  "extends": ["@nathpaiva/eslint-config"]
+  "extends": ["@nathpaiva/eslint-config"],
+  "rules": {
+    "@typescript-eslint/ban-types": 0
+  }
 }
