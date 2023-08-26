@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
+import { errorResponse } from '../helper'
 import Users, { comparePassword, createUser } from '../models/Users'
 
 const _generateToken = (user: User, secret: string) => {
@@ -14,7 +15,7 @@ export const users: Controllers['users'] = {
     res.json(users)
   },
   create_user: async (req, res) => {
-    const user: User = req.body
+    const user = req.body
     const response = validationResult(req)
     if (response && !response.isEmpty()) {
       return res.status(422).json({ errors: response.array() })
@@ -36,9 +37,7 @@ export const users: Controllers['users'] = {
         message: 'User created successfully',
       })
     } catch (err) {
-      return res
-        .status(400)
-        .json({ message: (err as Error).message, success: false })
+      errorResponse(res, req, err as Error)
     }
   },
   login: async (req, res) => {
@@ -82,6 +81,24 @@ export const users: Controllers['users'] = {
         success: false,
         message: `Authentication failed. Internal server error. ${error}`,
       })
+    }
+  },
+  delete: async (req, res) => {
+    // TODO: WIP
+    // const user: User = req.body
+    console.log('🚀 ~ file: Users.ts:89 ~ delete: ~ user:', req.params.id)
+    try {
+      if (!req.params.id) {
+        throw new Error('the id should be provided')
+      }
+      const response = await Users.findOneAndDelete({ _id: req.params.id })
+      console.log('🚀 ~ file: Users.ts:98 ~ delete: ~ response:', response)
+
+      res.json({
+        success: true,
+      })
+    } catch (err) {
+      errorResponse(res, req, err as Error)
     }
   },
 }

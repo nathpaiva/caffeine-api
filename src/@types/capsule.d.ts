@@ -1,5 +1,5 @@
 interface Capsule {
-  user_id: string
+  readonly user_id: string
   name: string
   brand: string
   type: string
@@ -9,5 +9,5 @@ interface Capsule {
     active: boolean
     days_before: number
   }
-  create_date: Date
+  create_date?: Date
 }

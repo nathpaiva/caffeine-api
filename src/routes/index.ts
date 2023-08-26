@@ -37,6 +37,11 @@ export default (app: Application, controllers: Controllers) => {
    * User login to get the token
    */
   api_routes.post('/login', controllers.users.login)
+  /**
+   * Delete user
+   * TODO: change this to auth, so the users can delete their own account
+   */
+  api_routes.delete('/users/:id', controllers.users.delete)
 
   // AUTHENTICATED ROUTES
   /**
@@ -73,8 +78,8 @@ export default (app: Application, controllers: Controllers) => {
       check('type', 'Type is required').isLength({ min: 3 }),
       check('price_last_buy', 'Price is required').isNumeric(),
       check('quantity_by_week', 'Quantity is required').isNumeric(),
-      check('notify_end_days_before', 'Notify is required').isNumeric(),
-      check('notify_end_active', 'Notify is required').isBoolean(),
+      check('notify_end.days_before', 'Notify is required').isNumeric(),
+      check('notify_end.active', 'Notify is required').isBoolean(),
     ],
     controllers.capsules.create,
   )
