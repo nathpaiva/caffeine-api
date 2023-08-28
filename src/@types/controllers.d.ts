@@ -11,9 +11,10 @@ type UsersController = {
 }
 
 type CapsulesController = {
-  list_capsules: (req: TRequestCapsule, res: TEResponse) => void
-  delete: (req: TRequestCapsule, res: TEResponse) => void
   create: (req: TRequestCapsule, res: TEResponse) => void
+  list_capsules: (req: TRequestCapsule, res: TEResponse) => void
+  get_capsule: (req: TRequestCapsule, res: TEResponse) => void
+  delete: (req: TRequestCapsule, res: TEResponse) => void
 }
 
 type Controllers = {

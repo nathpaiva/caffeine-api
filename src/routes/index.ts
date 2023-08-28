@@ -65,6 +65,27 @@ export default (app: Application, controllers: Controllers) => {
     ],
     controllers.capsules.create,
   )
+  api_auth_routes.get(
+    '/capsules/:id',
+    checkAuth,
+    controllers.capsules.get_capsule,
+  )
+  /**
+   * Get all capsules this endpoint was created only for the test propose
+   */
+  api_auth_routes.get(
+    '/capsules',
+    checkAuth,
+    controllers.capsules.list_capsules,
+  )
+  /**
+   * Delete a capsule
+   */
+  api_auth_routes.delete(
+    '/capsules/:id',
+    checkAuth,
+    controllers.capsules.delete,
+  )
 
   app.use('/api/auth', api_auth_routes)
   app.use('/api', api_routes)

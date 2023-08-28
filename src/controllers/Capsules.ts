@@ -46,11 +46,82 @@ export const capsules: Controllers['capsules'] = {
       })
     }
   },
-  async delete(req, res) {
+  async list_capsules(req, res) {
+    try {
+      const { userId } = req.cookies
+      const capsules = await Capsules.find({
+        user_id: userId,
+      })
+
+      return res.json({
+        success: true,
+        items: capsules,
+      })
+    } catch (error) {
+      res.json({
+        success: false,
+        message: error,
+      })
+    }
+  },
+  async get_capsule(req, res) {
     const { id } = req.params
+    const { userId } = req.cookies
+    if (!userId) {
+      throw new Error('You must to login')
+    }
+
+    if (!id) {
+      throw new Error('You must provide the capsule id')
+    }
 
     try {
-      await Capsules.findByIdAndRemove(id)
+      const capsule = await Capsules.findOne({
+        user_id: userId,
+        _id: id,
+      })
+
+      if (!capsule) {
+        throw new ErrorHandler({
+          message: 'Capsule not found',
+          status: 400,
+        })
+      }
+
+      res.json({
+        success: true,
+        capsule,
+      })
+    } catch (error) {
+      if (isErrorHandler(error)) {
+        res.status(error.status).json({
+          success: false,
+          message: error.message,
+        })
+      }
+    }
+  },
+  async delete(req, res) {
+    const { id } = req.params
+    const { userId } = req.cookies
+
+    if (!userId) {
+      throw new Error('You must to login')
+    }
+
+    if (!id) {
+      throw new Error('You must provide the capsule id to delete')
+    }
+
+    try {
+      const result = await Capsules.findOneAndDelete({
+        user_id: userId,
+        _id: id,
+      })
+
+      if (!result) {
+        throw new Error('Not found')
+      }
 
       return res.json({
         success: true,
@@ -58,7 +129,7 @@ export const capsules: Controllers['capsules'] = {
     } catch (err) {
       return res.json({
         success: false,
-        message: err,
+        message: (err as Error).message,
       })
     }
   },
