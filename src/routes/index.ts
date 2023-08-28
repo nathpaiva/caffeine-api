@@ -37,13 +37,12 @@ export default (app: Application, controllers: Controllers) => {
    * User login to get the token
    */
   api_routes.post('/login', controllers.users.login)
-  /**
-   * Delete user
-   * TODO: change this to auth, so the users can delete their own account
-   */
-  api_routes.delete('/users/:id', controllers.users.delete)
 
   // AUTHENTICATED ROUTES
+  /**
+   * Delete user
+   */
+  api_auth_routes.delete('/users', checkAuth, controllers.users.delete)
   /**
    * Get all users, this endpoint was created only for the test propose
    */

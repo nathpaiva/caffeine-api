@@ -6,5 +6,5 @@ export interface IErrorHandler {
 export function isErrorHandler<T>(
   data: T | IErrorHandler,
 ): data is IErrorHandler {
-  return !(data as IErrorHandler).status !== undefined
+  return typeof !(data as IErrorHandler).status === 'number'
 }
