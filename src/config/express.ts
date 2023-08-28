@@ -1,14 +1,15 @@
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import express, { Application } from 'express'
+import helmet from 'helmet'
 import morgan from 'morgan'
 
-import * as CONTROLLER from '../controllers'
+import * as CONTROLLERS from '../controllers'
 import routes from '../routes'
 import { logger } from '../services'
 
 export default () => {
-  const JWT_NAME = process.env.JWT_NAME
-  const JWT_KEY = process.env.JWT_KEY
+  const { JWT_NAME, JWT_KEY } = process.env
   if (!JWT_NAME || !JWT_KEY) {
     throw new Error('JWT_NAME OR JWT_KEY is not defined')
   }
@@ -17,14 +18,14 @@ export default () => {
 
   app.set(JWT_NAME, JWT_KEY)
 
+  app.use(helmet())
+  app.use(cookieParser())
   app.use(
     bodyParser.urlencoded({
       extended: true,
     }),
   )
   app.use(bodyParser.json())
-
-  app.use(express.static('../../public'))
 
   app.use(
     morgan('common', {
@@ -50,7 +51,7 @@ export default () => {
     next()
   })
 
-  routes(app, CONTROLLER)
+  routes(app, CONTROLLERS)
 
   return app
 }
