@@ -1,18 +1,23 @@
 import { validationResult } from 'express-validator'
 
-import { ErrorHandler, isErrorHandler } from '../helper'
+import { ErrorHandler, errorResponse, isErrorHandler } from '../helper'
 import Capsules from '../models/Capsules'
 
 export const capsules: Controllers['capsules'] = {
   async create(req, res) {
     const { userId } = req.cookies
-    const response = validationResult(req)
-
-    if (response && !response.isEmpty()) {
-      return res.status(422).json({ errors: response.array() })
-    }
+    const responseValidation = validationResult(req)
 
     try {
+      if (responseValidation && !responseValidation.isEmpty()) {
+        throw new ErrorHandler({
+          status: 422,
+          message: responseValidation.array().reduce((acc, message) => {
+            return acc.concat(message.msg)
+          }, ''),
+        })
+      }
+
       const {
         name,
         brand,
@@ -40,10 +45,14 @@ export const capsules: Controllers['capsules'] = {
         data: response,
       })
     } catch (err) {
-      return res.json({
-        success: false,
-        message: err,
-      })
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   async list_capsules(req, res) {
@@ -57,25 +66,33 @@ export const capsules: Controllers['capsules'] = {
         success: true,
         items: capsules,
       })
-    } catch (error) {
-      res.json({
-        success: false,
-        message: error,
-      })
+    } catch (err) {
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   async get_capsule(req, res) {
     const { id } = req.params
     const { userId } = req.cookies
-    if (!userId) {
-      throw new Error('You must to login')
-    }
-
-    if (!id) {
-      throw new Error('You must provide the capsule id')
-    }
 
     try {
+      if (!userId) {
+        throw new ErrorHandler({ status: 400, message: 'You must to login' })
+      }
+
+      if (!id) {
+        throw new ErrorHandler({
+          status: 400,
+          message: 'You must provide the capsule id',
+        })
+      }
+
       const capsule = await Capsules.findOne({
         user_id: userId,
         _id: id,
@@ -92,45 +109,53 @@ export const capsules: Controllers['capsules'] = {
         success: true,
         capsule,
       })
-    } catch (error) {
-      if (isErrorHandler(error)) {
-        res.status(error.status).json({
-          success: false,
-          message: error.message,
-        })
+    } catch (err) {
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
       }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   async delete(req, res) {
     const { id } = req.params
     const { userId } = req.cookies
 
-    if (!userId) {
-      throw new Error('You must to login')
-    }
-
-    if (!id) {
-      throw new Error('You must provide the capsule id to delete')
-    }
-
     try {
+      if (!userId) {
+        throw new ErrorHandler({ status: 400, message: 'You must to login' })
+      }
+
+      if (!id) {
+        throw new ErrorHandler({
+          status: 400,
+          message: 'You must provide the capsule id to delete',
+        })
+      }
       const result = await Capsules.findOneAndDelete({
         user_id: userId,
         _id: id,
       })
 
       if (!result) {
-        throw new Error('Not found')
+        throw new ErrorHandler({ status: 400, message: 'Not found' })
       }
 
       return res.json({
         success: true,
       })
     } catch (err) {
-      return res.json({
-        success: false,
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
         message: (err as Error).message,
-      })
+        status: 400,
+      } as ErrorHandler)
     }
   },
 }
