@@ -2,7 +2,6 @@ import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
 import { ErrorHandler, errorResponse } from '../helper'
-import Capsules from '../models/Capsules'
 import Users, { comparePassword, createUser } from '../models/Users'
 
 const _generateToken = (user: User, secret: string) => {
