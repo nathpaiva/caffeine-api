@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
-import { ErrorHandler, errorResponse } from '../helper'
+import { ErrorHandler, errorResponse, isErrorHandler } from '../helper'
 import Users, { comparePassword, createUser } from '../models/Users'
 
 const _generateToken = (user: User, secret: string) => {
@@ -53,7 +53,14 @@ export const users: Controllers['users'] = {
         message: 'User created successfully',
       })
     } catch (err) {
-      errorResponse(res, err as ErrorHandler)
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   login: async (req, res) => {
@@ -96,7 +103,14 @@ export const users: Controllers['users'] = {
         success: true,
       })
     } catch (err) {
-      errorResponse(res, err as ErrorHandler)
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   delete: async (req, res) => {
@@ -115,7 +129,14 @@ export const users: Controllers['users'] = {
         success: true,
       })
     } catch (err) {
-      errorResponse(res, err as ErrorHandler)
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
 }
