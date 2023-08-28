@@ -1,18 +1,11 @@
 import { validationResult } from 'express-validator'
 
+import { ErrorHandler, isErrorHandler } from '../helper'
 import Capsules from '../models/Capsules'
 
 export const capsules: Controllers['capsules'] = {
-  async list_capsules(req, res) {
-    const capsules = await Capsules.find()
-
-    return res.json({
-      success: true,
-      items: capsules,
-    })
-  },
   async create(req, res) {
-    const { id } = req.params
+    const { userId } = req.cookies
     const response = validationResult(req)
 
     if (response && !response.isEmpty()) {
@@ -30,7 +23,7 @@ export const capsules: Controllers['capsules'] = {
       } = req.body
 
       const response = await Capsules.create<Capsule>({
-        user_id: id,
+        user_id: userId,
         name: name,
         brand: brand,
         type: type,

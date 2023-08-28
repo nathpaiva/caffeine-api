@@ -7,11 +7,9 @@ export default (req: Request, res: Response, next: NextFunction) => {
     throw new Error('JWT_NAME is not defined')
   }
 
-  const { headers, app } = req
+  const { app, cookies } = req
 
-  const reqToken = headers['x-access-token']
-
-  if (!reqToken) {
+  if (!cookies.token) {
     return res.status(403).send({
       success: false,
       message: 'No token provided.',
@@ -19,7 +17,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const token = typeof reqToken === 'string' ? reqToken : reqToken[0]
+    const token = cookies.token
 
     jwt.verify(token, app.get(JWT_NAME))
 

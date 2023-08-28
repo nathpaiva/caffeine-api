@@ -49,28 +49,10 @@ export default (app: Application, controllers: Controllers) => {
    */
   api_auth_routes.get('/users', checkAuth, controllers.users.list_users)
   /**
-   * Get all capsules this endpoint was created only for the test propose
-   * TODO: create a request to get all capsules for the authenticated user
-   */
-  api_auth_routes.get(
-    '/capsules',
-    checkAuth,
-    controllers.capsules.list_capsules,
-  )
-  /**
-   * Delete a capsule
-   * TODO: change this action to use the user id
-   */
-  api_auth_routes.delete(
-    '/capsules/:id',
-    checkAuth,
-    controllers.capsules.delete,
-  )
-  /**
    * Create the capsule to the current authenticated user
    */
   api_auth_routes.post(
-    '/capsules/user/:id',
+    '/capsules',
     checkAuth,
     [
       check('name', 'Name is required').isLength({ min: 3 }),

@@ -69,12 +69,14 @@ export const users: Controllers['users'] = {
 
       const token = _generateToken(user.toJSON(), req.app.get(JWT_NAME))
 
-      // TODO: refactor this return
+      res.cookie('name', user.name)
+      res.cookie('token', token)
+      res.cookie('userId', user.id)
+
       return res.json({
         success: true,
-        message: 'Enjoy your token!',
-        token,
-        users: user,
+        id: user.id,
+        name: user.name,
       })
     } catch (error) {
       return res.status(500).json({
