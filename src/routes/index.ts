@@ -37,40 +37,21 @@ export default (app: Application, controllers: Controllers) => {
    * User login to get the token
    */
   api_routes.post('/login', controllers.users.login)
-  /**
-   * Delete user
-   * TODO: change this to auth, so the users can delete their own account
-   */
-  api_routes.delete('/users/:id', controllers.users.delete)
 
   // AUTHENTICATED ROUTES
+  /**
+   * Delete user
+   */
+  api_auth_routes.delete('/users', checkAuth, controllers.users.delete)
   /**
    * Get all users, this endpoint was created only for the test propose
    */
   api_auth_routes.get('/users', checkAuth, controllers.users.list_users)
   /**
-   * Get all capsules this endpoint was created only for the test propose
-   * TODO: create a request to get all capsules for the authenticated user
-   */
-  api_auth_routes.get(
-    '/capsules',
-    checkAuth,
-    controllers.capsules.list_capsules,
-  )
-  /**
-   * Delete a capsule
-   * TODO: change this action to use the user id
-   */
-  api_auth_routes.delete(
-    '/capsules/:id',
-    checkAuth,
-    controllers.capsules.delete,
-  )
-  /**
    * Create the capsule to the current authenticated user
    */
   api_auth_routes.post(
-    '/capsules/user/:id',
+    '/capsules',
     checkAuth,
     [
       check('name', 'Name is required').isLength({ min: 3 }),
@@ -82,6 +63,27 @@ export default (app: Application, controllers: Controllers) => {
       check('notify_end.active', 'Notify is required').isBoolean(),
     ],
     controllers.capsules.create,
+  )
+  api_auth_routes.get(
+    '/capsules/:id',
+    checkAuth,
+    controllers.capsules.get_capsule,
+  )
+  /**
+   * Get all capsules this endpoint was created only for the test propose
+   */
+  api_auth_routes.get(
+    '/capsules',
+    checkAuth,
+    controllers.capsules.list_capsules,
+  )
+  /**
+   * Delete a capsule
+   */
+  api_auth_routes.delete(
+    '/capsules/:id',
+    checkAuth,
+    controllers.capsules.delete,
   )
 
   app.use('/api/auth', api_auth_routes)

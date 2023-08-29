@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
-import { errorResponse } from '../helper'
+import { ErrorHandler, errorResponse, isErrorHandler } from '../helper'
 import Users, { comparePassword, createUser } from '../models/Users'
 
 const _generateToken = (user: User, secret: string) => {
@@ -17,27 +17,50 @@ export const users: Controllers['users'] = {
   create_user: async (req, res) => {
     const user = req.body
     const response = validationResult(req)
-    if (response && !response.isEmpty()) {
-      return res.status(422).json({ errors: response.array() })
-    }
+
     try {
+      if (response && !response.isEmpty()) {
+        throw new ErrorHandler({
+          status: 422,
+          message: response.array().reduce((acc, message) => {
+            return acc.concat(message.msg)
+          }, ''),
+        })
+      }
+
       const hasUser = await Users.find({
         $or: [{ user_name: user.name }, { email: user.email }],
       })
+
       if (hasUser.length > 0) {
-        throw new Error('User already exists')
+        throw new ErrorHandler({
+          message: 'User already exists',
+          status: 400,
+        })
       }
+
       const insertNewUserReference = new Users(user)
       const resultNewUser = await createUser(insertNewUserReference)
       if (!resultNewUser) {
-        throw new Error("User couldn't be created")
+        throw new ErrorHandler({
+          message: "User couldn't be created",
+          status: 400,
+        })
       }
-      return res.status(201).json({
+
+      res.status(201).json({
         success: true,
         message: 'User created successfully',
       })
     } catch (err) {
-      errorResponse(res, req, err as Error)
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   login: async (req, res) => {
@@ -47,8 +70,8 @@ export const users: Controllers['users'] = {
       })
 
       if (!user) {
-        return res.status(404).json({
-          success: false,
+        throw new ErrorHandler({
+          status: 404,
           message: 'Authentication failed. User not found.',
         })
       }
@@ -56,49 +79,64 @@ export const users: Controllers['users'] = {
       const isMatch = await comparePassword(req.body.password, user.password)
 
       if (!isMatch) {
-        return res.status(401).json({
-          success: false,
+        throw new ErrorHandler({
+          status: 401,
           message: 'Authentication failed. Wrong password.',
         })
       }
 
       const JWT_NAME = process.env.JWT_NAME
       if (!JWT_NAME) {
-        throw new Error('JWT_NAME is not defined')
+        throw new ErrorHandler({
+          status: 500,
+          message: 'JWT_NAME is not defined',
+        })
       }
 
       const token = _generateToken(user.toJSON(), req.app.get(JWT_NAME))
 
-      // TODO: refactor this return
+      res.cookie('name', user.name)
+      res.cookie('token', token)
+      res.cookie('userId', user.id)
+
       return res.json({
         success: true,
-        message: 'Enjoy your token!',
-        token,
-        users: user,
       })
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: `Authentication failed. Internal server error. ${error}`,
-      })
+    } catch (err) {
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
   delete: async (req, res) => {
-    // TODO: WIP
-    // const user: User = req.body
-    console.log('🚀 ~ file: Users.ts:89 ~ delete: ~ user:', req.params.id)
     try {
-      if (!req.params.id) {
-        throw new Error('the id should be provided')
+      if (!req.cookies.userId) {
+        throw new ErrorHandler({
+          message: 'The user id must be provided',
+          status: 400,
+        })
       }
-      const response = await Users.findOneAndDelete({ _id: req.params.id })
-      console.log('🚀 ~ file: Users.ts:98 ~ delete: ~ response:', response)
+      await Users.findOneAndDelete({ _id: req.cookies.userId })
+      // TODO: Clean up user entry
+      // const capsules = await Capsules.find({ user_id: req.cookies.userId })
 
       res.json({
         success: true,
       })
     } catch (err) {
-      errorResponse(res, req, err as Error)
+      if (isErrorHandler(err)) {
+        errorResponse(res, err)
+        return
+      }
+      errorResponse(res, {
+        message: (err as Error).message,
+        status: 400,
+      } as ErrorHandler)
     }
   },
 }
